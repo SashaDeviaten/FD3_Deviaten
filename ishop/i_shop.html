@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title> i_shop </title>
+    <link rel="stylesheet" href="i_shop.css">
+</head>
+
+<body>
+
+<div id="container"></div>
+
+<script src="https://unpkg.com/react@15/dist/react.js"></script>
+<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+
+<script src="i_shop.js" type="text/javascript"></script>
+
+<script>
+
+    let mobileTitle='Мобильные телефоны';
+    let mobilesArr = [
+        {
+            name: 'Xiaomi Redmi 4X 16GB Black',
+            price: 295,
+            img: "Xiaomi%20Redmi%204X%2016GB%20Black.jpeg",
+            count: 28
+        },
+        {
+            name: 'Samsung Galaxy A5 (2017) Black [A520F]',
+            price: 645,
+            img: "Samsung%20Galaxy%20A5%20(2017)%20Black%20%5BA520F%5D.jpeg",
+            count: 33
+        },
+        {
+            name: 'Huawei P8 lite 2017 (черный)',
+            price: 385,
+            img: "Huawei%20P8%20lite%202017%20(черный).jpeg",
+            count: 25
+        },
+        {
+            name: 'Nokia 8 Dual SIM (глянцевый индиго)',
+            price: 990,
+            img: "Nokia%208%20Dual%20SIM%20(глянцевый%20индиго).jpeg",
+            count: 17
+        },
+    ];
+
+    ReactDOM.render(
+        React.createElement(MobileBlock, {title: mobileTitle, products: mobilesArr}),
+        document.getElementById('container')
+    );
+
+</script>
+
+</body>
+
+</html>
+
+
+
