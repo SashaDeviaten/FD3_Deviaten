@@ -28,13 +28,13 @@ let MyFilter = React.createClass({
     },
 
     getSearchValue: function (e) {
-        this.setState({searchValue: e.target.value},this.updateSelect());
+        this.setState({searchValue: e.target.value},this.updateSelect);
 
     },
 
     sort: function (e) {
 
-        this.setState( {isSort: e.target.checked},this.updateSelect());
+        this.setState( {isSort: e.target.checked},this.updateSelect);
 
     },
 
