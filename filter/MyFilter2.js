@@ -12,7 +12,7 @@ let MyFilter = React.createClass({
     },
 
     getInitialState: function () {
-        return {selectArr: this.props.strArr, isSort:false};
+        return {selectArr: this.props.strArr, isSort:false, notSortSelectArr:this.props.strArr};
     },
 
     updateSelect: function (e) {
@@ -20,20 +20,22 @@ let MyFilter = React.createClass({
         let newStrArr = this.props.strArr.filter(elem => {
             return (elem.indexOf(newStr.toLowerCase()) === 0)
         });
-        if (this.state.isSort) {newStrArr=newStrArr.sort()}
-        this.setState({selectArr: newStrArr});
+        let notSortSelectArr=newStrArr.slice();
+        if (this.state.isSort) {newStrArr.sort()}
+        this.setState({selectArr: newStrArr,notSortSelectArr});
     },
 
     sort: function (e) {
         this.setState({isSort: e.target.checked});
 
         if (e.target.checked === true) {
-            let sortStrArr = this.state.selectArr.sort();
+            let sortStrArr = this.state.selectArr.slice();
+            sortStrArr.sort();
             this.setState({selectArr: sortStrArr});
         }
         else {
-            let event = new Event("change");
-            document.querySelector('.MyFilterSearch').dispatchEvent(event);
+            let notSortStrArr = this.state.notSortSelectArr;
+            this.setState({selectArr: notSortStrArr});
         }
     },
 
