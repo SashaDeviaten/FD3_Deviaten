@@ -19399,12 +19399,9 @@ var ProductsBlock = function (_React$Component) {
             editCard: null,
             createCard: false
         }, _this.productActivated = function (key) {
-            _this.setState({ activeProduct: key });
-            _this.setState({ editCard: null });
-            _this.setState({ createCard: false });
+            _this.setState({ activeProduct: key, editCard: null, createCard: false });
         }, _this.editCard = function (key) {
-            _this.setState({ activeProduct: null });
-            _this.setState({ editCard: key });
+            _this.setState({ activeProduct: null, editCard: key });
         }, _this.changeProduct = function (key, name, price, img, count) {
             var newProducts = _this.state.products.map(function (elem) {
                 if (elem.name !== key) {
@@ -19417,24 +19414,17 @@ var ProductsBlock = function (_React$Component) {
                     return elem;
                 }
             });
-            _this.setState({ products: newProducts });
-            _this.setState({ activeProduct: null });
-            _this.setState({ editCard: null });
+            _this.setState({ products: newProducts, activeProduct: null, editCard: null });
         }, _this.saveProduct = function (name, price, img, count) {
             var newProduct = {};
-            console.log(name);
             newProduct.name = name;
             newProduct.price = price;
             newProduct.img = img;
             newProduct.count = count;
             _this.state.products.push(newProduct);
-            _this.setState({ activeProduct: null });
-            _this.setState({ editCard: null });
-            _this.setState({ createCard: false });
+            _this.setState({ activeProduct: null, editCard: null, createCard: false });
         }, _this.createProduct = function () {
-            _this.setState({ activeProduct: null });
-            _this.setState({ editCard: null });
-            _this.setState({ createCard: true });
+            _this.setState({ activeProduct: null, editCard: null, createCard: true });
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -20193,92 +20183,49 @@ var MobileBlock = function (_React$Component) {
         key: 'render',
         value: function render() {
             var img = 'images/' + this.props.img;
-            if (this.props.name !== this.props.activeProduct) {
-                return !this.state.deletemobile && _react2.default.createElement(
-                    'tr',
-                    { key: this.props.name,
-                        className: 'products',
-                        onClick: this.mobileActivated
-                    },
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsImg' },
-                        _react2.default.createElement('img', { src: img })
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsName' },
-                        this.props.name,
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('input', {
-                            type: 'button',
-                            value: '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C',
-                            onClick: this.editCard
-                        }),
-                        _react2.default.createElement('input', {
-                            type: 'button',
-                            value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C',
-                            onClick: this.deleteMobile })
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsPrice' },
-                        ' ',
-                        this.props.price,
-                        ' BYN'
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsCount' },
-                        ' \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C ',
-                        this.props.count,
-                        ' \u0448\u0442.'
-                    )
-                );
-            } else {
-                return !this.state.deletemobile && _react2.default.createElement(
-                    'tr',
-                    { key: this.props.name,
-                        className: 'products',
-                        onClick: this.mobileActivated,
-                        style: { backgroundColor: 'grey' }
-                    },
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsImg' },
-                        _react2.default.createElement('img', { src: img })
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsName' },
-                        this.props.name,
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('input', {
-                            type: 'button',
-                            value: '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C',
-                            onClick: this.editCard
-                        }),
-                        _react2.default.createElement('input', {
-                            type: 'button',
-                            value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C',
-                            onClick: this.deleteMobile })
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsPrice' },
-                        ' ',
-                        this.props.price,
-                        ' BYN'
-                    ),
-                    _react2.default.createElement(
-                        'td',
-                        { className: 'productsCount' },
-                        ' \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C ',
-                        this.props.count,
-                        ' \u0448\u0442.'
-                    )
-                );
-            }
+            var className = 'products';
+            if (this.props.name === this.props.activeProduct) className = 'activeProduct';
+            return !this.state.deletemobile && _react2.default.createElement(
+                'tr',
+                { key: this.props.name,
+                    className: className,
+                    onClick: this.mobileActivated
+                },
+                _react2.default.createElement(
+                    'td',
+                    { className: 'productsImg' },
+                    _react2.default.createElement('img', { src: img })
+                ),
+                _react2.default.createElement(
+                    'td',
+                    { className: 'productsName' },
+                    this.props.name,
+                    _react2.default.createElement('br', null),
+                    _react2.default.createElement('input', {
+                        type: 'button',
+                        value: '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C',
+                        onClick: this.editCard
+                    }),
+                    _react2.default.createElement('input', {
+                        type: 'button',
+                        value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C',
+                        onClick: this.deleteMobile })
+                ),
+                _react2.default.createElement(
+                    'td',
+                    { className: 'productsPrice' },
+                    ' ',
+                    this.props.price,
+                    ' BYN'
+                ),
+                _react2.default.createElement(
+                    'td',
+                    { className: 'productsCount' },
+                    ' \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C ',
+                    this.props.count,
+                    ' \u0448\u0442.'
+                )
+            );
         }
     }]);
 
@@ -20342,10 +20289,7 @@ var MobileCard = function (_React$Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileCard.__proto__ || Object.getPrototypeOf(MobileCard)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            priceError: false
-
-        }, _this.saveEdit = function () {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileCard.__proto__ || Object.getPrototypeOf(MobileCard)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _this.saveEdit = function () {
             var flag = true;
             var name = document.querySelector('input.nameInput').value;
             var price = document.querySelector('input.priceInput').value;
@@ -20382,160 +20326,165 @@ var MobileCard = function (_React$Component) {
     _createClass(MobileCard, [{
         key: 'render',
         value: function render() {
+            var card = _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 ',
+                    this.props.name
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435: ',
+                    this.props.name
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u0426\u0435\u043D\u0430: ',
+                    this.props.price
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435: ',
+                    this.props.img
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E: ',
+                    this.props.count
+                )
+            );
+
+            var editCard = _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 ',
+                    this.props.name
+                ),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
+                ),
+                _react2.default.createElement('input', { className: 'nameInput', type: 'text',
+                    defaultValue: this.props.name }),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u0426\u0435\u043D\u0430:'
+                ),
+                _react2.default.createElement('input', { className: 'priceInput', type: 'text', defaultValue: this.props.price }),
+                this.state.priceError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
+                ),
+                _react2.default.createElement('input', { className: 'imgInput', type: 'text',
+                    defaultValue: this.props.img }),
+                this.state.imgError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
+                ),
+                _react2.default.createElement('input', { className: 'countInput', type: 'text',
+                    defaultValue: this.props.count }),
+                this.state.countError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C', onClick: this.saveEdit }),
+                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
+            );
+
+            var createCard = _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u043D\u043E\u0432\u043E\u0433\u043E \u0442\u043E\u0432\u0430\u0440\u0430'
+                ),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
+                ),
+                _react2.default.createElement('input', { className: 'nameInput', type: 'text',
+                    placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u0426\u0435\u043D\u0430:'
+                ),
+                _react2.default.createElement('input', { className: 'priceInput', type: 'text',
+                    placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0446\u0435\u043D\u0443 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                this.state.priceError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
+                ),
+                _react2.default.createElement('input', { className: 'imgInput', type: 'text',
+                    placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                this.state.imgError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'label',
+                    null,
+                    ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
+                ),
+                _react2.default.createElement('input', { className: 'countInput', type: 'text',
+                    placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                this.state.countError && _react2.default.createElement(
+                    'span',
+                    { className: 'validError' },
+                    '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement('input', { type: 'button', value: '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C', onClick: this.saveEdit }),
+                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
+            );
 
             return _react2.default.createElement(
                 'div',
                 null,
-                this.props.ableKey === this.props.name && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 ',
-                        this.props.name
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435: ',
-                        this.props.name
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        '\u0426\u0435\u043D\u0430: ',
-                        this.props.price
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        '\u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435: ',
-                        this.props.img
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        '\u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E: ',
-                        this.props.count
-                    )
-                ),
-                this.props.editCard === this.props.name && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 ',
-                        this.props.name
-                    ),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
-                    ),
-                    _react2.default.createElement('input', { className: 'nameInput', type: 'text',
-                        defaultValue: this.props.name }),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u0426\u0435\u043D\u0430:'
-                    ),
-                    _react2.default.createElement('input', { className: 'priceInput', type: 'text', defaultValue: this.props.price }),
-                    this.state.priceError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
-                    ),
-                    _react2.default.createElement('input', { className: 'imgInput', type: 'text',
-                        defaultValue: this.props.img }),
-                    this.state.imgError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
-                    ),
-                    _react2.default.createElement('input', { className: 'countInput', type: 'text',
-                        defaultValue: this.props.count }),
-                    this.state.countError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C', onClick: this.saveEdit }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
-                ),
-                this.props.createCard && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        '\u041A\u0430\u0440\u0442\u043E\u0447\u043A\u0430 \u043D\u043E\u0432\u043E\u0433\u043E \u0442\u043E\u0432\u0430\u0440\u0430'
-                    ),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
-                    ),
-                    _react2.default.createElement('input', { className: 'nameInput', type: 'text',
-                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u0426\u0435\u043D\u0430:'
-                    ),
-                    _react2.default.createElement('input', { className: 'priceInput', type: 'text',
-                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0446\u0435\u043D\u0443 \u0442\u043E\u0432\u0430\u0440\u0430' }),
-                    this.state.priceError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
-                    ),
-                    _react2.default.createElement('input', { className: 'imgInput', type: 'text',
-                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
-                    this.state.imgError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'label',
-                        null,
-                        ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
-                    ),
-                    _react2.default.createElement('input', { className: 'countInput', type: 'text',
-                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u0430' }),
-                    this.state.countError && _react2.default.createElement(
-                        'span',
-                        { className: 'validError' },
-                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C', onClick: this.saveEdit }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
-                )
+                this.props.ableKey === this.props.name && card,
+                this.props.editCard === this.props.name && editCard,
+                this.props.createCard && createCard
             );
         }
     }]);

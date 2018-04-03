@@ -14,17 +14,16 @@ export default class MobileBlock extends React.Component {
         cbProductActivated: PropTypes.func.isRequired,
         cbEditCard: PropTypes.func.isRequired,
     };
-    state = {
-    };
+    state = {};
     mobileActivated = () => {
         this.props.cbProductActivated(this.props.name);
 
     };
     deleteMobile = (e) => {
         e.stopPropagation();
-        let flag=confirm('Удалить элемент?');
+        let flag = confirm('Удалить элемент?');
         this.props.cbProductActivated(null);
-        this.setState( {deletemobile:flag} );
+        this.setState({deletemobile: flag});
 
 
     };
@@ -34,70 +33,38 @@ export default class MobileBlock extends React.Component {
     };
 
     render() {
-        let img=`images/${this.props.img}`;
-        if (this.props.name !== this.props.activeProduct) {
-            return (
+        let img = `images/${this.props.img}`;
+        let className = 'products';
+        if (this.props.name === this.props.activeProduct) className = 'activeProduct';
+        return (
 
-                (!this.state.deletemobile) && <tr key={this.props.name}
-                    className='products'
-                    onClick={this.mobileActivated}
-                >
+            (!this.state.deletemobile) && <tr key={this.props.name}
+                                              className={className}
+                                              onClick={this.mobileActivated}
+            >
 
-                    <td className='productsImg'>
-                        <img src={img}></img>
-                    </td>
-                    <td className='productsName'>
-                        {this.props.name}
-                        <br/>
-                        <input
-                            type='button'
-                            value='Редактировать'
-                            onClick={this.editCard}
-                        />
-                        <input
-                            type='button'
-                            value='Удалить'
-                            onClick={this.deleteMobile}/>
-                    </td>
-                    <td className='productsPrice'> {this.props.price} BYN</td>
+                <td className='productsImg'>
+                    <img src={img}></img>
+                </td>
+                <td className='productsName'>
+                    {this.props.name}
+                    <br/>
+                    <input
+                        type='button'
+                        value='Редактировать'
+                        onClick={this.editCard}
+                    />
+                    <input
+                        type='button'
+                        value='Удалить'
+                        onClick={this.deleteMobile}/>
+                </td>
+                <td className='productsPrice'> {this.props.price} BYN</td>
 
-                    <td className='productsCount'> осталось {this.props.count} шт.</td>
-                </tr>
-            )
-        }
-        else {
-            return (
-                (!this.state.deletemobile) &&  <tr key={this.props.name}
-                    className='products'
-                    onClick={this.mobileActivated}
-                    style={{backgroundColor: 'grey'}}
-                >
+                <td className='productsCount'> осталось {this.props.count} шт.</td>
+            </tr>
+        )
 
-                    <td className='productsImg'>
-                        <img src={img}></img>
-                    </td>
-                    <td className='productsName'>
-                        {this.props.name}
-                        <br/>
-                        <input
-                            type='button'
-                            value='Редактировать'
-                            onClick={this.editCard}
-                        />
-                        <input
-                            type='button'
-                            value='Удалить'
-                            onClick={this.deleteMobile}/>
-                    </td>
-                    <td className='productsPrice'> {this.props.price} BYN</td>
-
-
-                    <td className='productsCount'> осталось {this.props.count} шт.</td>
-                </tr>
-
-
-            )
-        }
     }
 
 

@@ -2,7 +2,10 @@
     border: 1px solid gray;
 }
 
-
+.activeProduct {
+    border: 1px solid gray;
+    background-color: gray;
+}
 
 
 .validError {

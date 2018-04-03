@@ -27,13 +27,10 @@ export default class ProductsBlock extends React.Component {
     };
 
     productActivated = (key) => {
-        this.setState({activeProduct: key});
-        this.setState({editCard: null});
-        this.setState({createCard: false});
+        this.setState({activeProduct: key,editCard: null,createCard: false});
     };
     editCard = (key) => {
-        this.setState({activeProduct: null});
-        this.setState({editCard: key});
+        this.setState({activeProduct: null,editCard: key});
     };
     changeProduct = (key, name, price, img, count) => {
         let newProducts = this.state.products.map(function (elem) {
@@ -48,10 +45,7 @@ export default class ProductsBlock extends React.Component {
                 return elem
             }
         });
-        this.setState({products: newProducts});
-        this.setState({activeProduct: null});
-        this.setState({editCard: null});
-
+        this.setState({products: newProducts,activeProduct: null,editCard: null});
     };
     saveProduct = (name, price, img, count) => {
         let newProduct={};
@@ -60,15 +54,10 @@ export default class ProductsBlock extends React.Component {
         newProduct.img = img;
         newProduct.count = count;
         this.state.products.push(newProduct);
-        this.setState({activeProduct: null});
-        this.setState({editCard: null});
-        this.setState({createCard: false});
-
+        this.setState({activeProduct: null,editCard: null,createCard: false});
     };
     createProduct = () => {
-        this.setState({activeProduct: null});
-        this.setState({editCard: null});
-        this.setState({createCard: true});
+        this.setState({activeProduct: null,editCard: null,createCard: true});
     };
 
 
