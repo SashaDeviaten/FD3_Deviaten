@@ -22,5 +22,11 @@
 .products {
     border: 1px solid gray;
 }
+img {
+    height: 100px;
+}
+.validError {
+    color: red
+}
 
 

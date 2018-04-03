@@ -5,25 +5,57 @@ import PropTypes from 'prop-types';
 
 export default class MobileCard extends React.Component {
 
-    static propTypes = {
+    static propTypes = {};
+    state = {
+        priceError: false
 
     };
     saveEdit = () => {
-        let name=document.querySelector('input.nameInput').value;
-        let price=parseInt(document.querySelector('input.priceInput').value);
-        let img=document.querySelector('input.imgInput').value;
-        let count=parseInt(document.querySelector('input.countInput').value);
-        this.props.cbChangeProduct(this.props.name,name,price,img,count);
+        let flag=true;
+        let name = document.querySelector('input.nameInput').value;
+        let price = document.querySelector('input.priceInput').value;
+        let regexNum = new RegExp(/^\d+$/);
+        if (!(price.match(regexNum))) {
+            this.setState(( {priceError:true} ));
+            flag=false;
+        }
+        else {
+            price=parseInt(price);
+            this.setState(( {priceError:false} ));
+        }
+        let img = document.querySelector('input.imgInput').value;
+        let regexImg = new RegExp(/\.jpeg$/);
+        if (!(img.match(regexImg))) {
+            this.setState(( {imgError:true} ));
+            flag=false;
+        }
+        else this.setState(( {imgError:false} ));
+        let count = document.querySelector('input.countInput').value;
+        if (!(count.match(regexNum))) {
+            this.setState(( {countError:true} ));
+            flag=false;
+        }
+        else {
+            count=parseInt(count);
+            this.setState(( {countError:false} ));
+        }
+        if (flag) {
+            if (!this.props.createCard) {
+                this.props.cbChangeProduct(this.props.name, name, price, img, count);
+            }
+            else this.props.cbSaveProduct(name, price, img, count);
+        }
 
     };
-    saveProduct = () => {
-        let name=document.querySelector('input.nameInput').value;
-        let price=parseInt(document.querySelector('input.priceInput').value);
-        let img=document.querySelector('input.imgInput').value;
-        let count=parseInt(document.querySelector('input.countInput').value);
-        this.props.cbSaveProduct(name,price,img,count);
 
-    };
+   /* saveProduct = () => {
+        let name = document.querySelector('input.nameInput').value;
+        let price = document.querySelector('input.priceInput').value;
+        let img = document.querySelector('input.imgInput').value;
+        let count = parseInt(document.querySelector('input.countInput').value);
+        this.props.cbSaveProduct(name, price, img, count);
+
+    };*/
 
     render() {
 
@@ -44,10 +76,28 @@ export default class MobileCard extends React.Component {
                     (this.props.editCard === this.props.name) &&
                     <div>
                         <h2>Карточка {this.props.name}</h2>
-                        <label> Название:</label><input className='nameInput' type='text' defaultValue={this.props.name}/><br/>
-                        <label> Цена:</label><input className='priceInput' type='text' defaultValue={this.props.price}/><br/>
-                        <label> Изображение:</label><input className='imgInput' type='text' defaultValue={this.props.img}/><br/>
-                        <label> Колличество:</label><input className='countInput' type='text' defaultValue={this.props.count}/><br/>
+                        <label> Название:</label><input className='nameInput' type='text'
+                                                        defaultValue={this.props.name}/><br/>
+                        <label> Цена:</label><input className='priceInput' type='text' defaultValue={this.props.price}/>
+                        {
+                            (this.state.priceError) &&
+                            <span className='validError'>  Введите число!</span>
+
+                        }<br/>
+                        <label> Изображение:</label><input className='imgInput' type='text'
+                                                           defaultValue={this.props.img}/>
+                        {
+                            (this.state.imgError) &&
+                            <span className='validError'> Необходимо JPEG изображение! </span>
+
+                        }<br/>
+                        <label> Колличество:</label><input className='countInput' type='text'
+                                                           defaultValue={this.props.count}/>
+                        {
+                            (this.state.countError) &&
+                            <span className='validError'>  Введите число!</span>
+
+                        }<br/>
                         <input type='button' value='Сохранить' onClick={this.saveEdit}/>
                         <input type='button' value='Отменить' onClick={this.props.cbProductActivated}/>
                     </div>
@@ -57,11 +107,30 @@ export default class MobileCard extends React.Component {
                     (this.props.createCard) &&
                     <div>
                         <h2>Карточка нового товара</h2>
-                        <label> Название:</label><input className='nameInput' type='text' placeholder='Введите название товара'/><br/>
-                        <label> Цена:</label><input className='priceInput' type='text' placeholder='Введите цену товара'/><br/>
-                        <label> Изображение:</label><input className='imgInput' type='text' placeholder='Введите изображение товара'/><br/>
-                        <label> Колличество:</label><input className='countInput' type='text' placeholder='Введите колличество товара'/><br/>
-                        <input type='button' value='Добавить' onClick={this.saveProduct}/>
+                        <label> Название:</label><input className='nameInput' type='text'
+                                                        placeholder='Введите название товара'/><br/>
+                        <label> Цена:</label><input className='priceInput' type='text'
+                                                    placeholder='Введите цену товара'/>
+                        {
+                            (this.state.priceError) &&
+                            <span className='validError'>  Введите число!</span>
+
+                        }<br/>
+                        <label> Изображение:</label><input className='imgInput' type='text'
+                                                           placeholder='Введите изображение товара'/>
+                        {
+                            (this.state.imgError) &&
+                            <span className='validError'> Необходимо JPEG изображение! </span>
+
+                        }<br/>
+                        <label> Колличество:</label><input className='countInput' type='text'
+                                                           placeholder='Введите колличество товара'/>
+                        {
+                            (this.state.countError) &&
+                            <span className='validError'>  Введите число!</span>
+
+                        }<br/>
+                        <input type='button' value='Добавить' onClick={this.saveEdit}/>
                         <input type='button' value='Отменить' onClick={this.props.cbProductActivated}/>
                     </div>
 

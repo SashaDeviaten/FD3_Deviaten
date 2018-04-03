@@ -19401,6 +19401,7 @@ var ProductsBlock = function (_React$Component) {
         }, _this.productActivated = function (key) {
             _this.setState({ activeProduct: key });
             _this.setState({ editCard: null });
+            _this.setState({ createCard: false });
         }, _this.editCard = function (key) {
             _this.setState({ activeProduct: null });
             _this.setState({ editCard: key });
@@ -19421,14 +19422,15 @@ var ProductsBlock = function (_React$Component) {
             _this.setState({ editCard: null });
         }, _this.saveProduct = function (name, price, img, count) {
             var newProduct = {};
-
+            console.log(name);
             newProduct.name = name;
             newProduct.price = price;
             newProduct.img = img;
             newProduct.count = count;
-            _this.setState({ products: _this.state.products.push(newProduct) });
+            _this.state.products.push(newProduct);
             _this.setState({ activeProduct: null });
             _this.setState({ editCard: null });
+            _this.setState({ createCard: false });
         }, _this.createProduct = function () {
             _this.setState({ activeProduct: null });
             _this.setState({ editCard: null });
@@ -19461,13 +19463,16 @@ var ProductsBlock = function (_React$Component) {
                     ableKey: _this2.state.activeProduct,
                     editCard: _this2.state.editCard,
                     cbProductActivated: _this2.productActivated,
-                    cbSaveProduct: _this2.saveProduct
+                    cbSaveProduct: _this2.saveProduct,
+                    cbChangeProduct: _this2.changeProduct
 
                 });
             });
             var newMobileCardCode = _react2.default.createElement(_MobileCard2.default, {
                 cbProductActivated: this.productActivated,
-                cbSaveProduct: this.saveProduct
+                cbSaveProduct: this.saveProduct,
+                createCard: this.state.createCard,
+                name: 'new'
 
             });
 
@@ -20169,12 +20174,12 @@ var MobileBlock = function (_React$Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileBlock.__proto__ || Object.getPrototypeOf(MobileBlock)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            img: 'images/' + _this.props.img
-        }, _this.mobileActivated = function () {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileBlock.__proto__ || Object.getPrototypeOf(MobileBlock)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _this.mobileActivated = function () {
             _this.props.cbProductActivated(_this.props.name);
-        }, _this.deleteMobile = function () {
+        }, _this.deleteMobile = function (e) {
+            e.stopPropagation();
             var flag = confirm('Удалить элемент?');
+            _this.props.cbProductActivated(null);
             _this.setState({ deletemobile: flag });
         }, _this.editCard = function (e) {
             e.stopPropagation();
@@ -20185,6 +20190,7 @@ var MobileBlock = function (_React$Component) {
     _createClass(MobileBlock, [{
         key: 'render',
         value: function render() {
+            var img = 'images/' + this.props.img;
             if (this.props.name !== this.props.activeProduct) {
                 return !this.state.deletemobile && _react2.default.createElement(
                     'tr',
@@ -20195,7 +20201,7 @@ var MobileBlock = function (_React$Component) {
                     _react2.default.createElement(
                         'td',
                         { className: 'productsImg' },
-                        _react2.default.createElement('img', { src: this.state.img })
+                        _react2.default.createElement('img', { src: img })
                     ),
                     _react2.default.createElement(
                         'td',
@@ -20238,7 +20244,7 @@ var MobileBlock = function (_React$Component) {
                     _react2.default.createElement(
                         'td',
                         { className: 'productsImg' },
-                        _react2.default.createElement('img', { src: this.state.img })
+                        _react2.default.createElement('img', { src: img })
                     ),
                     _react2.default.createElement(
                         'td',
@@ -20330,23 +20336,55 @@ var MobileCard = function (_React$Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileCard.__proto__ || Object.getPrototypeOf(MobileCard)).call.apply(_ref, [this].concat(args))), _this), _this.saveEdit = function () {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileCard.__proto__ || Object.getPrototypeOf(MobileCard)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+            priceError: false
+
+        }, _this.saveEdit = function () {
+            var flag = true;
             var name = document.querySelector('input.nameInput').value;
-            var price = parseInt(document.querySelector('input.priceInput').value);
+            var price = document.querySelector('input.priceInput').value;
+            var regexNum = new RegExp(/^\d+$/);
+            if (!price.match(regexNum)) {
+                _this.setState({ priceError: true });
+                flag = false;
+            } else {
+                price = parseInt(price);
+                _this.setState({ priceError: false });
+            }
             var img = document.querySelector('input.imgInput').value;
-            var count = parseInt(document.querySelector('input.countInput').value);
-            _this.props.cbChangeProduct(_this.props.name, name, price, img, count);
-        }, _this.saveProduct = function () {
-            var name = document.querySelector('input.nameInput').value;
-            var price = parseInt(document.querySelector('input.priceInput').value);
-            var img = document.querySelector('input.imgInput').value;
-            var count = parseInt(document.querySelector('input.countInput').value);
-            _this.props.cbSaveProduct(name, price, img, count);
+            var regexImg = new RegExp(/\.jpeg$/);
+            if (!img.match(regexImg)) {
+                _this.setState({ imgError: true });
+                flag = false;
+            } else _this.setState({ imgError: false });
+            var count = document.querySelector('input.countInput').value;
+            if (!count.match(regexNum)) {
+                _this.setState({ countError: true });
+                flag = false;
+            } else {
+                count = parseInt(count);
+                _this.setState({ countError: false });
+            }
+            if (flag) {
+                if (!_this.props.createCard) {
+                    _this.props.cbChangeProduct(_this.props.name, name, price, img, count);
+                } else _this.props.cbSaveProduct(name, price, img, count);
+            }
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(MobileCard, [{
         key: 'render',
+
+
+        /* saveProduct = () => {
+             let name = document.querySelector('input.nameInput').value;
+             let price = document.querySelector('input.priceInput').value;
+             let img = document.querySelector('input.imgInput').value;
+             let count = parseInt(document.querySelector('input.countInput').value);
+             this.props.cbSaveProduct(name, price, img, count);
+           };*/
+
         value: function render() {
 
             return _react2.default.createElement(
@@ -20400,7 +20438,8 @@ var MobileCard = function (_React$Component) {
                         null,
                         ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
                     ),
-                    _react2.default.createElement('input', { className: 'nameInput', type: 'text', defaultValue: this.props.name }),
+                    _react2.default.createElement('input', { className: 'nameInput', type: 'text',
+                        defaultValue: this.props.name }),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
@@ -20408,20 +20447,37 @@ var MobileCard = function (_React$Component) {
                         ' \u0426\u0435\u043D\u0430:'
                     ),
                     _react2.default.createElement('input', { className: 'priceInput', type: 'text', defaultValue: this.props.price }),
+                    this.state.priceError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
                         null,
                         ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
                     ),
-                    _react2.default.createElement('input', { className: 'imgInput', type: 'text', defaultValue: this.props.img }),
+                    _react2.default.createElement('input', { className: 'imgInput', type: 'text',
+                        defaultValue: this.props.img }),
+                    this.state.imgError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
+                    ),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
                         null,
                         ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
                     ),
-                    _react2.default.createElement('input', { className: 'countInput', type: 'text', defaultValue: this.props.count }),
+                    _react2.default.createElement('input', { className: 'countInput', type: 'text',
+                        defaultValue: this.props.count }),
+                    this.state.countError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C', onClick: this.saveEdit }),
                     _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
@@ -20439,30 +20495,49 @@ var MobileCard = function (_React$Component) {
                         null,
                         ' \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435:'
                     ),
-                    _react2.default.createElement('input', { className: 'nameInput', type: 'text', placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    _react2.default.createElement('input', { className: 'nameInput', type: 'text',
+                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
                         null,
                         ' \u0426\u0435\u043D\u0430:'
                     ),
-                    _react2.default.createElement('input', { className: 'priceInput', type: 'text', placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0446\u0435\u043D\u0443 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    _react2.default.createElement('input', { className: 'priceInput', type: 'text',
+                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0446\u0435\u043D\u0443 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    this.state.priceError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
                         null,
                         ' \u0418\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435:'
                     ),
-                    _react2.default.createElement('input', { className: 'imgInput', type: 'text', placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    _react2.default.createElement('input', { className: 'imgInput', type: 'text',
+                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435 \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    this.state.imgError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        ' \u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E JPEG \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u0435! '
+                    ),
                     _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'label',
                         null,
                         ' \u041A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E:'
                     ),
-                    _react2.default.createElement('input', { className: 'countInput', type: 'text', placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    _react2.default.createElement('input', { className: 'countInput', type: 'text',
+                        placeholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u043B\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0442\u043E\u0432\u0430\u0440\u0430' }),
+                    this.state.countError && _react2.default.createElement(
+                        'span',
+                        { className: 'validError' },
+                        '  \u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C', onClick: this.saveProduct }),
+                    _react2.default.createElement('input', { type: 'button', value: '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C', onClick: this.saveEdit }),
                     _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C', onClick: this.props.cbProductActivated })
                 )
             );

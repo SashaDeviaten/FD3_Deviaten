@@ -28,6 +28,7 @@ export default class ProductsBlock extends React.Component {
     productActivated = (key) => {
         this.setState({activeProduct: key});
         this.setState({editCard: null});
+        this.setState({createCard: false});
     };
     editCard = (key) => {
         this.setState({activeProduct: null});
@@ -53,14 +54,15 @@ export default class ProductsBlock extends React.Component {
     };
     saveProduct = (name, price, img, count) => {
         let newProduct={};
-
+console.log(name)
         newProduct.name = name;
         newProduct.price = price;
         newProduct.img = img;
         newProduct.count = count;
-        this.setState({products: this.state.products.push(newProduct)});
+        this.state.products.push(newProduct);
         this.setState({activeProduct: null});
         this.setState({editCard: null});
+        this.setState({createCard: false});
 
     };
     createProduct = () => {
@@ -92,12 +94,15 @@ export default class ProductsBlock extends React.Component {
                         editCard={this.state.editCard}
                         cbProductActivated={this.productActivated}
                         cbSaveProduct={this.saveProduct}
+                        cbChangeProduct={this.changeProduct}
 
             />
         );
         let newMobileCardCode = <MobileCard
                 cbProductActivated={this.productActivated}
                 cbSaveProduct={this.saveProduct}
+                createCard={this.state.createCard}
+                name='new'
 
             />
         ;

@@ -14,15 +14,17 @@ export default class MobileBlock extends React.Component {
         cbEditCard: PropTypes.func.isRequired,
     };
     state = {
-        img: `images/${this.props.img}`,
     };
     mobileActivated = () => {
         this.props.cbProductActivated(this.props.name);
 
     };
-    deleteMobile = () => {
+    deleteMobile = (e) => {
+        e.stopPropagation();
         let flag=confirm('Удалить элемент?');
-        this.setState( {deletemobile:flag} )
+        this.props.cbProductActivated(null);
+        this.setState( {deletemobile:flag} );
+
 
     };
     editCard = (e) => {
@@ -31,6 +33,7 @@ export default class MobileBlock extends React.Component {
     };
 
     render() {
+        let img=`images/${this.props.img}`;
         if (this.props.name !== this.props.activeProduct) {
             return (
 
@@ -40,7 +43,7 @@ export default class MobileBlock extends React.Component {
                 >
 
                     <td className='productsImg'>
-                        <img src={this.state.img}></img>
+                        <img src={img}></img>
                     </td>
                     <td className='productsName'>
                         {this.props.name}
@@ -70,7 +73,7 @@ export default class MobileBlock extends React.Component {
                 >
 
                     <td className='productsImg'>
-                        <img src={this.state.img}></img>
+                        <img src={img}></img>
                     </td>
                     <td className='productsName'>
                         {this.props.name}
