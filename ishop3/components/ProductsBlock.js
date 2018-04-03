@@ -91,7 +91,7 @@ export default class ProductsBlock extends React.Component {
                 cbProductActivated={this.productActivated}
                 cbSaveProduct={this.saveProduct}
                 createCard={this.state.createCard}
-                name='new'
+                name='Новый товар'
 
             />
         ;

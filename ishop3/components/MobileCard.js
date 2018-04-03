@@ -57,22 +57,37 @@ export default class MobileCard extends React.Component {
         let editCard = <div>
             <h2>Карточка {this.props.name}</h2>
             <label> Название:</label><input className='nameInput' type='text'
-                                            defaultValue={this.props.name}/><br/>
-            <label> Цена:</label><input className='priceInput' type='text' defaultValue={this.props.price}/>
+                                            {...(this.props.createCard
+                                                    ? {placeholder: 'Введите название товара'}
+                                                    : {defaultValue: this.props.name}
+                                            )}
+        /><br/>
+            <label> Цена:</label><input className='priceInput' type='text'
+                                        {...(this.props.createCard
+                                                ? {placeholder: 'Введите цену товара'}
+                                                : {defaultValue: this.props.price}
+                                        )}/>
             {
                 (this.state.priceError) &&
                 <span className='validError'>  Введите число!</span>
 
             }<br/>
             <label> Изображение:</label><input className='imgInput' type='text'
-                                               defaultValue={this.props.img}/>
+                                               {...(this.props.createCard
+                                                       ? {placeholder: 'Введите изображение товара'}
+                                                       : {defaultValue: this.props.img}
+                                               )}/>
             {
                 (this.state.imgError) &&
                 <span className='validError'> Необходимо JPEG изображение! </span>
 
             }<br/>
             <label> Колличество:</label><input className='countInput' type='text'
-                                               defaultValue={this.props.count}/>
+                                               {...(this.props.createCard
+                                                       ? {placeholder: 'Введите колличество товара'}
+                                                       : {defaultValue: this.props.count}
+                                               )}/>
+
             {
                 (this.state.countError) &&
                 <span className='validError'>  Введите число!</span>
@@ -82,34 +97,6 @@ export default class MobileCard extends React.Component {
             <input type='button' value='Отменить' onClick={this.props.cbProductActivated}/>
         </div>;
 
-        let createCard = <div>
-            <h2>Карточка нового товара</h2>
-            <label> Название:</label><input className='nameInput' type='text'
-                                            placeholder='Введите название товара'/><br/>
-            <label> Цена:</label><input className='priceInput' type='text'
-                                        placeholder='Введите цену товара'/>
-            {
-                (this.state.priceError) &&
-                <span className='validError'>  Введите число!</span>
-
-            }<br/>
-            <label> Изображение:</label><input className='imgInput' type='text'
-                                               placeholder='Введите изображение товара'/>
-            {
-                (this.state.imgError) &&
-                <span className='validError'> Необходимо JPEG изображение! </span>
-
-            }<br/>
-            <label> Колличество:</label><input className='countInput' type='text'
-                                               placeholder='Введите колличество товара'/>
-            {
-                (this.state.countError) &&
-                <span className='validError'>  Введите число!</span>
-
-            }<br/>
-            <input type='button' value='Добавить' onClick={this.saveEdit}/>
-            <input type='button' value='Отменить' onClick={this.props.cbProductActivated}/>
-        </div>;
 
         return (
             <div>
@@ -120,7 +107,7 @@ export default class MobileCard extends React.Component {
                     (this.props.editCard === this.props.name) && editCard
                 }
                 {
-                    (this.props.createCard) && createCard
+                    (this.props.createCard) && editCard
                 }
             </div>
         )
