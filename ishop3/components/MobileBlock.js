@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import './MobileBlock.css';
 
 export default class MobileBlock extends React.Component {
 

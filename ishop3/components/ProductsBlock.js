@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MobileBlock from './MobileBlock'
 import MobileCard from "./MobileCard";
+import './ProductBlock.css';
 
 export default class ProductsBlock extends React.Component {
 
@@ -54,7 +55,6 @@ export default class ProductsBlock extends React.Component {
     };
     saveProduct = (name, price, img, count) => {
         let newProduct={};
-console.log(name)
         newProduct.name = name;
         newProduct.price = price;
         newProduct.img = img;

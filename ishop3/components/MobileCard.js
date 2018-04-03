@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import './MobileCard.css';
 
 export default class MobileCard extends React.Component {
 
@@ -47,15 +47,6 @@ export default class MobileCard extends React.Component {
         }
 
     };
-
-   /* saveProduct = () => {
-        let name = document.querySelector('input.nameInput').value;
-        let price = document.querySelector('input.priceInput').value;
-        let img = document.querySelector('input.imgInput').value;
-        let count = parseInt(document.querySelector('input.countInput').value);
-        this.props.cbSaveProduct(name, price, img, count);
-
-    };*/
 
     render() {
 
