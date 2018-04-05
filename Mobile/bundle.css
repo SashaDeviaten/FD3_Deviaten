@@ -14,6 +14,7 @@ span.MobileClientBalance
 span.MobileClientFIO
 {
   margin-right: 30px;
+  cursor: pointer;
 }
 .MobileCompany
 {
@@ -31,4 +32,9 @@ span.MobileClientFIO
 .MobileCompanyClients
 {
   padding-top: 5px;
+}
+
+.warning
+{
+  color: red;
 }

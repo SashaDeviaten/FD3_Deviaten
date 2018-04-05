@@ -14,4 +14,5 @@ span.MobileClientBalance
 span.MobileClientFIO
 {
   margin-right: 30px;
+  cursor: pointer;
 }

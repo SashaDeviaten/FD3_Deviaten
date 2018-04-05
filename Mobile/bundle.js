@@ -1103,7 +1103,7 @@ var _MobileCompany2 = _interopRequireDefault(_MobileCompany);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var companyName = 'Velcom';
-var clientsArr = [{ id: 1, fio: "Иванов И.И.", balance: 200 }, { id: 2, fio: "Сидоров С.С.", balance: 250 }, { id: 3, fio: "Петров П.П.", balance: 180 }, { id: 4, fio: "Григорьев Г.Г.", balance: 220 }];
+var clientsArr = [{ id: 1, fio: "Иванов И.И.", balance: -200 }, { id: 2, fio: "Сидоров С.С.", balance: 250 }, { id: 3, fio: "Петров П.П.", balance: -100 }, { id: 4, fio: "Григорьев Г.Г.", balance: 220 }];
 
 _reactDom2.default.render(_react2.default.createElement(_MobileCompany2.default, {
   name: companyName,
@@ -20013,21 +20013,41 @@ var MobileCompany = function (_React$PureComponent) {
             name: _this.props.name,
             clients: _this.props.clients,
             showNewClientCard: false
+        }, _this.componentWillMount = function () {
+            _this.showAllClients();
         }, _this.setName1 = function () {
             _this.setState({ name: 'МТС' });
         }, _this.setName2 = function () {
             _this.setState({ name: 'Velcom' });
         }, _this.addClient = function () {
+            _this.setState({ showFioWarning: false, showBalanceWarning: false });
+
+            if (_this.newClientFioRef.value === '') {
+                _this.setState({ showFioWarning: true });
+                return;
+            }
+
+            var regexNum = new RegExp(/^-?\d+$/);
+            if (!_this.newClientBalanceRef.value.match(regexNum)) {
+                _this.setState({ showBalanceWarning: true });
+                return;
+            }
+
             _this.state.showNewClientCard = false;
             var newClients = [].concat(_toConsumableArray(_this.state.clients));
             var newClient = {};
-            newClient.id = _this.state.clients.length + 1;
+            var idArr = [];
+            [].concat(_toConsumableArray(_this.state.clients)).forEach(function (c) {
+                idArr.push(c.id);
+            });
+            newClient.id = Math.max.apply(null, idArr) + 1;
             newClient.fio = _this.newClientFioRef.value;
             newClient.balance = parseInt(_this.newClientBalanceRef.value);
+            newClient.notVisibility = false;
             newClients.push(newClient);
             _this.setState({ clients: newClients });
         }, _this.showNewClientCard = function () {
-            _this.setState({ showNewClientCard: true });
+            _this.setState({ showNewClientCard: true, showFioWarning: false, showBalanceWarning: false });
         }, _this.deleteClient = function (clientId) {
             var newClients = _this.state.clients.filter(function (c) {
                 return c.id !== clientId;
@@ -20058,8 +20078,59 @@ var MobileCompany = function (_React$PureComponent) {
         }, _this.setNewClientBalanceRef = function (ref) {
             _this.newClientBalanceRef = ref;
         }, _this.filterByBalance = function () {
-            var newClients = _this.state.clients.sort(function (a, b) {
-                return b.balance - a.balance;
+            var newClients = [].concat(_toConsumableArray(_this.state.clients));
+            newClients.sort(function (a, b) {
+                return parseInt(b.balance) - parseInt(a.balance);
+            });
+            _this.setState({ clients: newClients });
+        }, _this.showActiveClients = function () {
+            if (_this.state.clients.some(function (c) {
+                return c.balance < 0 && c.notVisibility === false;
+            })) {
+                var newClients = [].concat(_toConsumableArray(_this.state.clients));
+                newClients.forEach(function (c, i) {
+                    if (c.balance >= 0 && c.notVisibility === false) return;
+                    if (c.balance < 0 && c.notVisibility === true) return;
+                    if (c.balance < 0) {
+                        var newClient = _extends({}, c);
+                        newClient.notVisibility = true;
+                        newClients[i] = newClient;
+                    } else {
+                        var _newClient = _extends({}, c);
+                        _newClient.notVisibility = false;
+                        newClients[i] = _newClient;
+                    }
+                });
+                _this.setState({ clients: newClients });
+            }
+        }, _this.showDebtorClients = function () {
+            if (_this.state.clients.some(function (c) {
+                return c.balance >= 0 && c.notVisibility === false;
+            })) {
+                var newClients = [].concat(_toConsumableArray(_this.state.clients));
+                newClients.forEach(function (c, i) {
+                    if (c.balance < 0 && c.notVisibility === false) return;
+                    if (c.balance >= 0 && c.notVisibility === true) return;
+                    if (c.balance >= 0) {
+                        var newClient = _extends({}, c);
+                        newClient.notVisibility = true;
+                        newClients[i] = newClient;
+                    } else {
+                        var _newClient2 = _extends({}, c);
+                        _newClient2.notVisibility = false;
+                        newClients[i] = _newClient2;
+                    }
+                });
+                _this.setState({ clients: newClients });
+            }
+        }, _this.showAllClients = function () {
+            var newClients = [].concat(_toConsumableArray(_this.state.clients));
+            newClients.forEach(function (c, i) {
+                if (c.notVisibility !== false) {
+                    var newClient = _extends({}, c);
+                    newClient.notVisibility = false;
+                    newClients[i] = newClient;
+                }
             });
             _this.setState({ clients: newClients });
         }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -20102,12 +20173,23 @@ var MobileCompany = function (_React$PureComponent) {
                     'div',
                     null,
                     _react2.default.createElement('input', { type: 'text', placeholder: '\u0424\u0418\u041E', ref: this.setNewClientFioRef }),
+                    this.state.showFioWarning && _react2.default.createElement(
+                        'span',
+                        { className: 'warning' },
+                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0444\u0430\u043C\u0438\u043B\u0438\u044E!'
+                    ),
                     _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u0430\u043B\u0430\u043D\u0441', ref: this.setNewClientBalanceRef }),
+                    this.state.showBalanceWarning && _react2.default.createElement(
+                        'span',
+                        { className: 'warning' },
+                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u043A\u043B\u0438\u0435\u043D\u0442\u0430', onClick: this.addClient })
                 ),
                 _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E \u0431\u0430\u043B\u0430\u043D\u0441\u0443', onClick: this.filterByBalance }),
-                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0445', onClick: this.showNewClientCard }),
-                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u0434\u043E\u043B\u0436\u043D\u0438\u043A\u043E\u0432', onClick: this.showNewClientCard })
+                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u0430\u043A\u0442\u0438\u0432\u043D\u044B\u0445', onClick: this.showActiveClients }),
+                _react2.default.createElement('input', { type: 'button', value: '\u041E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u0434\u043E\u043B\u0436\u043D\u0438\u043A\u043E\u0432', onClick: this.showDebtorClients }),
+                _react2.default.createElement('input', { type: 'button', value: '\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0432\u0441\u0435\u0445 \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432', onClick: this.showAllClients })
             );
         }
     }]);
@@ -20848,8 +20930,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(1);
@@ -20885,21 +20965,32 @@ var MobileClient = function (_React$PureComponent) {
         }
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MobileClient.__proto__ || Object.getPrototypeOf(MobileClient)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            info: _extends({}, _this.props.info),
+            info: _this.props.info,
             showButtons: false,
             showFioInput: false,
             showBalanceInput: false
+        }, _this.componentWillReceiveProps = function (newProps) {
+            _this.setState({ info: newProps.info });
         }, _this.showButtons = function () {
             _this.setState({ showButtons: !_this.state.showButtons });
         }, _this.deleteClient = function () {
             _this.props.cbDeleteClient(_this.state.info.id);
         }, _this.changeFio = function () {
-            _this.setState({ showFioInput: false });
-            if (_this.newFioRef) {
-                var newFio = _this.newFioRef.value;
-                _this.props.cbChangeClientFio(_this.state.info.id, newFio);
+            _this.setState({ showFioWarning: false });
+            if (_this.newFioRef.value === '') {
+                _this.setState({ showFioWarning: true });
+                return;
             }
+            _this.setState({ showFioInput: false });
+            var newFio = _this.newFioRef.value;
+            _this.props.cbChangeClientFio(_this.state.info.id, newFio);
         }, _this.changeBalance = function () {
+            _this.setState({ showBalanceWarning: false });
+            var regexNum = new RegExp(/^-?\d+$/);
+            if (!_this.newBalanceRef.value.match(regexNum)) {
+                _this.setState({ showBalanceWarning: true });
+                return;
+            }
             _this.setState({ showBalanceInput: false });
             if (_this.newBalanceRef) {
                 var newBalance = _this.newBalanceRef.value;
@@ -20924,7 +21015,7 @@ var MobileClient = function (_React$PureComponent) {
 
             console.log("MobileClient id=" + this.state.info.id + " render");
 
-            return _react2.default.createElement(
+            return !this.state.info.notVisibility && _react2.default.createElement(
                 'div',
                 { className: 'MobileClient' },
                 _react2.default.createElement(
@@ -20933,12 +21024,12 @@ var MobileClient = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'span',
                         { className: 'MobileClientFIO', onClick: this.showButtons },
-                        this.props.info.fio
+                        this.state.info.fio
                     ),
                     _react2.default.createElement(
                         'span',
                         { className: 'MobileClientBalance' },
-                        this.props.info.balance
+                        this.state.info.balance
                     )
                 ),
                 this.state.showButtons && _react2.default.createElement(
@@ -20947,18 +21038,28 @@ var MobileClient = function (_React$PureComponent) {
                     _react2.default.createElement('input', { type: 'button', value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C', onClick: this.deleteClient }),
                     _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u0430\u043C\u0438\u043B\u0438\u044E', onClick: this.showFioInput }),
                     _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441', onClick: this.showBalanceInput }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043A\u0440\u044B\u0442\u044C \u043F\u0430\u043D\u0435\u043B\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439', onClick: this.showButtons })
+                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043A\u0440\u044B\u0442\u044C \u043A\u043D\u043E\u043F\u043A\u0438 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439', onClick: this.showButtons })
                 ),
                 this.state.showFioInput && _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0435 \u0424\u0418\u041E', ref: this.setNewFioRef }),
+                    this.state.showFioWarning && _react2.default.createElement(
+                        'span',
+                        { className: 'warning' },
+                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0444\u0430\u043C\u0438\u043B\u0438\u044E!'
+                    ),
                     _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeFio })
                 ),
                 this.state.showBalanceInput && _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0439 \u0431\u0430\u043B\u0430\u043D\u0441', ref: this.setNewBalanceRef }),
+                    this.state.showBalanceWarning && _react2.default.createElement(
+                        'span',
+                        { className: 'warning' },
+                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                    ),
                     _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeBalance })
                 )
             );

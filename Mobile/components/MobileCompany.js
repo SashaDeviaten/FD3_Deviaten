@@ -21,7 +21,11 @@ export default class MobileCompany extends React.PureComponent {
     state = {
         name: this.props.name,
         clients: this.props.clients,
-        showNewClientCard:false,
+        showNewClientCard: false,
+    };
+
+    componentWillMount = () => {
+        this.showAllClients();
     };
 
     setName1 = () => {
@@ -34,18 +38,36 @@ export default class MobileCompany extends React.PureComponent {
 
 
     addClient = () => {
-        this.state.showNewClientCard=false;
+        this.setState({showFioWarning: false, showBalanceWarning: false});
+
+        if (this.newClientFioRef.value === '') {
+            this.setState({showFioWarning: true});
+            return
+        }
+
+        let regexNum = new RegExp(/^-?\d+$/);
+        if (!(this.newClientBalanceRef.value.match(regexNum))) {
+            this.setState({showBalanceWarning: true});
+            return
+        }
+
+        this.state.showNewClientCard = false;
         let newClients = [...this.state.clients];
-        let newClient={};
-        newClient.id=this.state.clients.length+1;
-        newClient.fio=this.newClientFioRef.value;
-        newClient.balance=parseInt(this.newClientBalanceRef.value);
+        let newClient = {};
+        let idArr = [];
+        [...this.state.clients].forEach((c) => {
+            idArr.push(c.id)
+        });
+        newClient.id = Math.max.apply(null, idArr) + 1;
+        newClient.fio = this.newClientFioRef.value;
+        newClient.balance = parseInt(this.newClientBalanceRef.value);
+        newClient.notVisibility = false;
         newClients.push(newClient);
         this.setState({clients: newClients});
     };
 
     showNewClientCard = () => {
-        this.setState({showNewClientCard: true})
+        this.setState({showNewClientCard: true, showFioWarning: false, showBalanceWarning: false})
     };
 
     deleteClient = (clientId) => {
@@ -54,9 +76,9 @@ export default class MobileCompany extends React.PureComponent {
         });
         this.setState({clients: newClients});
     };
-    changeClientFio = (clientId,newFio) => {
+    changeClientFio = (clientId, newFio) => {
         let newClients = [...this.state.clients];
-        newClients.forEach((c,i) => {
+        newClients.forEach((c, i) => {
             if (c.id === clientId) {
                 let newClient = {...c};
                 newClient.fio = newFio;
@@ -65,9 +87,9 @@ export default class MobileCompany extends React.PureComponent {
         });
         this.setState({clients: newClients});
     };
-    changeClientBalance = (clientId,newBalance) => {
+    changeClientBalance = (clientId, newBalance) => {
         let newClients = [...this.state.clients];
-        newClients.forEach((c,i) => {
+        newClients.forEach((c, i) => {
             if (c.id === clientId) {
                 let newClient = {...c};
                 newClient.balance = parseInt(newBalance);
@@ -86,11 +108,65 @@ export default class MobileCompany extends React.PureComponent {
     };
 
     filterByBalance = () => {
-        let newClients = this.state.clients.sort((a,b) => {
-            return (b.balance-a.balance)
+        let newClients = [...this.state.clients];
+        newClients.sort((a, b) => {
+            return (parseInt(b.balance) - parseInt(a.balance))
         });
         this.setState({clients: newClients});
     };
+    showActiveClients = () => {
+        if (this.state.clients.some((c) => (c.balance < 0 && c.notVisibility === false))) {
+            let newClients = [...this.state.clients];
+            newClients.forEach((c, i) => {
+                if (c.balance >= 0 && c.notVisibility === false) return;
+                if (c.balance < 0 && c.notVisibility === true) return;
+                if (c.balance < 0) {
+                    let newClient = {...c};
+                    newClient.notVisibility = true;
+                    newClients[i] = newClient;
+                }
+                else {
+                    let newClient = {...c};
+                    newClient.notVisibility = false;
+                    newClients[i] = newClient;
+                }
+            });
+            this.setState({clients: newClients});
+        }
+    };
+    showDebtorClients = () => {
+        if (this.state.clients.some((c) => (c.balance >= 0 && c.notVisibility === false))) {
+            let newClients = [...this.state.clients];
+            newClients.forEach((c, i) => {
+                if (c.balance < 0 && c.notVisibility === false) return;
+                if (c.balance >= 0 && c.notVisibility === true) return;
+                if (c.balance >= 0) {
+                    let newClient = {...c};
+                    newClient.notVisibility = true;
+                    newClients[i] = newClient;
+                }
+                else {
+                    let newClient = {...c};
+                    newClient.notVisibility = false;
+                    newClients[i] = newClient;
+                }
+            });
+            this.setState({clients: newClients});
+        }
+    };
+
+    showAllClients = () => {
+        let newClients = [...this.state.clients];
+        newClients.forEach((c, i) => {
+            if (c.notVisibility !== false) {
+                let newClient = {...c};
+                newClient.notVisibility = false;
+                newClients[i] = newClient;
+            }
+        });
+        this.setState({clients: newClients});
+    };
+
 
     render() {
         console.log("MobileCompany render");
@@ -116,13 +192,20 @@ export default class MobileCompany extends React.PureComponent {
                 {
                     (this.state.showNewClientCard) && <div>
                         <input type='text' placeholder='ФИО' ref={this.setNewClientFioRef}/>
+                        {
+                            (this.state.showFioWarning) && <span className='warning'>Введите фамилию!</span>
+                        }
                         <input type='text' placeholder='Баланс' ref={this.setNewClientBalanceRef}/>
+                        {
+                            (this.state.showBalanceWarning) && <span className='warning'>Введите число!</span>
+                        }
                         <input type='button' value='Сохранить клиента' onClick={this.addClient}/>
                     </div>
                 }
                 <input type="button" value="Отфильтровать по балансу" onClick={this.filterByBalance}/>
-                <input type="button" value="Отфильтровать активных" onClick={this.showNewClientCard}/>
-                <input type="button" value="Отфильтровать должников" onClick={this.showNewClientCard}/>
+                <input type="button" value="Отфильтровать активных" onClick={this.showActiveClients}/>
+                <input type="button" value="Отфильтровать должников" onClick={this.showDebtorClients}/>
+                <input type="button" value="Показать всех клиентов" onClick={this.showAllClients}/>
             </div>
         )
             ;
