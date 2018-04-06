@@ -20144,11 +20144,13 @@ var MobileCompany = function (_React$PureComponent) {
             console.log("MobileCompany render");
 
             var clientsCode = this.state.clients.map(function (client) {
-                return _react2.default.createElement(_MobileClient2.default, { key: client.id,
-                    info: client,
-                    cbDeleteClient: _this2.deleteClient,
-                    cbChangeClientFio: _this2.changeClientFio,
-                    cbChangeClientBalance: _this2.changeClientBalance });
+                if (!client.notVisibility) {
+                    return _react2.default.createElement(_MobileClient2.default, { key: client.id,
+                        info: client,
+                        cbDeleteClient: _this2.deleteClient,
+                        cbChangeClientFio: _this2.changeClientFio,
+                        cbChangeClientBalance: _this2.changeClientBalance });
+                }
             });
 
             return _react2.default.createElement(
@@ -21015,52 +21017,55 @@ var MobileClient = function (_React$PureComponent) {
 
             console.log("MobileClient id=" + this.state.info.id + " render");
 
-            return !this.state.info.notVisibility && _react2.default.createElement(
-                'div',
-                { className: 'MobileClient' },
+            return (
+                // (!this.state.info.notVisibility) &&
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'MobileClient' },
                     _react2.default.createElement(
-                        'span',
-                        { className: 'MobileClientFIO', onClick: this.showButtons },
-                        this.state.info.fio
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'MobileClientFIO', onClick: this.showButtons },
+                            this.state.info.fio
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'MobileClientBalance' },
+                            this.state.info.balance
+                        )
                     ),
-                    _react2.default.createElement(
-                        'span',
-                        { className: 'MobileClientBalance' },
-                        this.state.info.balance
+                    this.state.showButtons && _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('input', { type: 'button', value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C', onClick: this.deleteClient }),
+                        _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u0430\u043C\u0438\u043B\u0438\u044E', onClick: this.showFioInput }),
+                        _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441', onClick: this.showBalanceInput }),
+                        _react2.default.createElement('input', { type: 'button', value: '\u0421\u043A\u0440\u044B\u0442\u044C \u043A\u043D\u043E\u043F\u043A\u0438 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439', onClick: this.showButtons })
+                    ),
+                    this.state.showFioInput && _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0435 \u0424\u0418\u041E', ref: this.setNewFioRef }),
+                        this.state.showFioWarning && _react2.default.createElement(
+                            'span',
+                            { className: 'warning' },
+                            '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0444\u0430\u043C\u0438\u043B\u0438\u044E!'
+                        ),
+                        _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeFio })
+                    ),
+                    this.state.showBalanceInput && _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0439 \u0431\u0430\u043B\u0430\u043D\u0441', ref: this.setNewBalanceRef }),
+                        this.state.showBalanceWarning && _react2.default.createElement(
+                            'span',
+                            { className: 'warning' },
+                            '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
+                        ),
+                        _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeBalance })
                     )
-                ),
-                this.state.showButtons && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement('input', { type: 'button', value: '\u0423\u0434\u0430\u043B\u0438\u0442\u044C', onClick: this.deleteClient }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0444\u0430\u043C\u0438\u043B\u0438\u044E', onClick: this.showFioInput }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u0431\u0430\u043B\u0430\u043D\u0441', onClick: this.showBalanceInput }),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043A\u0440\u044B\u0442\u044C \u043A\u043D\u043E\u043F\u043A\u0438 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0439', onClick: this.showButtons })
-                ),
-                this.state.showFioInput && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0435 \u0424\u0418\u041E', ref: this.setNewFioRef }),
-                    this.state.showFioWarning && _react2.default.createElement(
-                        'span',
-                        { className: 'warning' },
-                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0444\u0430\u043C\u0438\u043B\u0438\u044E!'
-                    ),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeFio })
-                ),
-                this.state.showBalanceInput && _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: '\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u043D\u044B\u0439 \u0431\u0430\u043B\u0430\u043D\u0441', ref: this.setNewBalanceRef }),
-                    this.state.showBalanceWarning && _react2.default.createElement(
-                        'span',
-                        { className: 'warning' },
-                        '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0447\u0438\u0441\u043B\u043E!'
-                    ),
-                    _react2.default.createElement('input', { type: 'button', value: '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435', onClick: this.changeBalance })
                 )
             );
         }
