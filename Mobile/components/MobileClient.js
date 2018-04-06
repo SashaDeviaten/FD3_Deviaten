@@ -84,7 +84,7 @@ export default class MobileClient extends React.PureComponent {
         console.log("MobileClient id=" + this.state.info.id + " render");
 
         return (
-            (!this.state.info.notVisibility) &&
+           // (!this.state.info.notVisibility) &&
             <div className='MobileClient'>
 
                 <div>

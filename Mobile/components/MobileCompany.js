@@ -171,12 +171,15 @@ export default class MobileCompany extends React.PureComponent {
     render() {
         console.log("MobileCompany render");
 
-        let clientsCode = this.state.clients.map(client =>
-            <MobileClient key={client.id}
-                          info={client}
-                          cbDeleteClient={this.deleteClient}
-                          cbChangeClientFio={this.changeClientFio}
-                          cbChangeClientBalance={this.changeClientBalance}/>
+        let clientsCode = this.state.clients.map(client => {
+                if (!client.notVisibility) {
+                    return <MobileClient key={client.id}
+                                         info={client}
+                                         cbDeleteClient={this.deleteClient}
+                                         cbChangeClientFio={this.changeClientFio}
+                                         cbChangeClientBalance={this.changeClientBalance}/>
+                }
+            }
         );
 
 
