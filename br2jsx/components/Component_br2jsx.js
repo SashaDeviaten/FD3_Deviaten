@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -13,13 +13,21 @@ export default class Component_br2jsx extends React.PureComponent {
         this.state = this.prepareContent({...props})
     }
 
-    prepareContent = (props) => {
-        let breakTag = RegExp(/<br ?\/?>/);
-        let strings = props.content.split(breakTag);
-        props.content = strings.map((item, i) => {
-            return <div key={i}>{item}</div>
-        });
 
+                //firstVariant
+    // prepareContent = (props) => {
+    //     let breakTag = RegExp(/<br ?\/?>/);
+    //     let strings = props.content.split(breakTag);
+    //     props.content = strings.map((item, i) => {
+    //         return <div key={i}>{item}</div>
+    //     });
+    //
+    //     return props
+    // };
+
+                //secondVariant
+    prepareContent = (props) => {
+        props.content = props.content.split(/<br ?\/?>/);
         return props
     };
 
@@ -28,7 +36,9 @@ export default class Component_br2jsx extends React.PureComponent {
 
         return (
             <div>
-                {this.state.content}
+                {this.state.content.map((str, i) => {
+                    return <Fragment key={i}>{str}<br/></Fragment>
+                })}
             </div>
         );
     }

@@ -19962,6 +19962,20 @@ var Component_br2jsx = function (_React$PureComponent) {
         return _this;
     }
 
+    //firstVariant
+    // prepareContent = (props) => {
+    //     let breakTag = RegExp(/<br ?\/?>/);
+    //     let strings = props.content.split(breakTag);
+    //     props.content = strings.map((item, i) => {
+    //         return <div key={i}>{item}</div>
+    //     });
+    //
+    //     return props
+    // };
+
+    //secondVariant
+
+
     _createClass(Component_br2jsx, [{
         key: 'render',
         value: function render() {
@@ -19970,7 +19984,14 @@ var Component_br2jsx = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                this.state.content
+                this.state.content.map(function (str, i) {
+                    return _react2.default.createElement(
+                        _react.Fragment,
+                        { key: i },
+                        str,
+                        _react2.default.createElement('br', null)
+                    );
+                })
             );
         }
     }]);
@@ -19984,16 +20005,7 @@ Component_br2jsx.propTypes = {
 
 var _initialiseProps = function _initialiseProps() {
     this.prepareContent = function (props) {
-        var breakTag = RegExp(/<br ?\/?>/);
-        var strings = props.content.split(breakTag);
-        props.content = strings.map(function (item, i) {
-            return _react2.default.createElement(
-                'div',
-                { key: i },
-                item
-            );
-        });
-
+        props.content = props.content.split(/<br ?\/?>/);
         return props;
     };
 };
