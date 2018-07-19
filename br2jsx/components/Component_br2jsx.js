@@ -37,7 +37,10 @@ export default class Component_br2jsx extends React.PureComponent {
         return (
             <div>
                 {this.state.content.map((str, i) => {
-                    return <Fragment key={i}>{str}<br/></Fragment>
+                    return <Fragment key={i}>
+                        {str}
+                        {(i !== this.state.content.length - 1) && <br/>}
+                    </Fragment>
                 })}
             </div>
         );
