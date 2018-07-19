@@ -19979,6 +19979,8 @@ var Component_br2jsx = function (_React$PureComponent) {
     _createClass(Component_br2jsx, [{
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             // console.log(this.props);
 
             return _react2.default.createElement(
@@ -19989,7 +19991,7 @@ var Component_br2jsx = function (_React$PureComponent) {
                         _react.Fragment,
                         { key: i },
                         str,
-                        _react2.default.createElement('br', null)
+                        i !== _this2.state.content.length - 1 && _react2.default.createElement('br', null)
                     );
                 })
             );
